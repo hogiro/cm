@@ -11,7 +11,8 @@ Ext.define ('Status', {
 		         {name: 'name'},
 		         {name: 'startDate'},
 		         {name: 'endDate'},
-		         {name: 'totalDays'}
+		         {name: 'totalDays'},
+		         {name: 'actualDays'}
 		         /*
 		         {name: 'volume'},
 		         {name: 'soll'},
@@ -119,9 +120,13 @@ var grid = Ext.create('Ext.grid.Panel', {
 		        	  dataIndex: 'endDate',
 		        	  renderer: Ext.util.Format.dateRenderer('d.m.Y')
 				  }, {
-		        	  text: 'Tage', //5
+		        	  text: 'Laufzeit (Tage)', //5
 		        	  width: 100,
 		        	  dataIndex: 'totalDays'
+		          }, {
+		        	  text: 'Ist (Tage)', //5
+		        	  width: 100,
+		        	  dataIndex: 'actualDays'
 		          }
 		      ],
 		   

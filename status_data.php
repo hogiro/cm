@@ -22,17 +22,16 @@ $query_c = "SELECT * FROM campaign" ;
 //get total
 $count_result = $db->query($query_c);
 $total = mysql_num_rows($count_result);
-$json = '';
-$json .= '{';
-$json .= '"rows" :';
-$json .= '[';
 
 if (mysql_num_rows($result) > 0){
 	while($obj = mysql_fetch_object($result))
 		{
-		$diff = abs(strtotime($obj->endDate) - strtotime($obj->startDate));;
-		$days = floor($diff/(60*60*24));
-		$obj->totalDays ="$days";
+		$diffTotalDays = abs(strtotime($obj->endDate) - strtotime($obj->startDate));
+		$totalDays = floor($diffTotalDays/(60*60*24));
+		$obj->totalDays ="$totalDays";
+		$diffActualDays = abs(strtotime(date('Y-m-d')) - strtotime($obj->startDate));
+		$actualDays = floor($diffActualDays/(60*60*24));
+		$obj->actualDays = "$actualDays";
 		$arr[] = $obj;
 		
 	    }

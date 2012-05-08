@@ -11,6 +11,9 @@ $limit = ($_REQUEST["limit"] == null)? 200 : $_REQUEST["limit"];
 $query = "SELECT campaign_id, case when CURDATE() < startDate then 'erwartet' when CURDATE()>endDate then 'beendet' else 'aktiv' end AS state,name,startDate, endDate FROM campaign" ;
 
 $query .= " ORDER BY ".$_REQUEST["sort"]." ".$_REQUEST["dir"];
+if ($_REQUEST['sort'] !='name'){
+	$query .=", name ASC";
+}
 $query .= " LIMIT ".$start.",".$limit;
 
 $result = $db->query($query); 
