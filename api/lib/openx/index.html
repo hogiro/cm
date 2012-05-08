@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>OpenX Class : Interface to connect to OpenX API</title>
+
+<style type='text/css' media='all'>@import url('./userguide.css');</style>
+<link rel='stylesheet' type='text/css' media='all' href='../userguide.css' />
+
+<meta http-equiv='expires' content='-1' />
+<meta http-equiv= 'pragma' content='no-cache' />
+<meta name='robots' content='all' />
+
+</head>
+<body>
+
+<!-- START NAVIGATION -->
+<div id="nav"><div id="nav_inner"></div></div>
+<div id="nav2"><a name="top">&nbsp;</a></div>
+<div id="masthead">
+<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
+<tr>
+<td><h1>OpenX Class</h1></td>
+<td id="breadcrumb_right"><!--<a href="#">Right Breadcrumb</a>--></td>
+</tr>
+</table>
+</div>
+<!-- END NAVIGATION -->
+
+
+<!-- START BREADCRUMB -->
+<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
+<tr>
+<td id="breadcrumb">
+<a href="http://www.ecliptik.net/openx/">Project Home</a> &nbsp;&#8250;&nbsp;
+<a href="http://www.ecliptik.net/openx/">User Guide Home</a> &nbsp;&#8250;&nbsp;
+OpenX Class
+</td>
+<td id="searchbox"><form method="get" action="http://www.google.com/search"><input type="hidden" name="as_sitesearch" id="as_sitesearch" value="www.ecliptik.net/openx/" />Search Project User Guide&nbsp; <input type="text" class="input" style="width:200px;" name="q" id="q" size="31" maxlength="255" value="" />&nbsp;<input type="submit" class="submit" name="sa" value="Go" /></form></td>
+</tr>
+</table>
+<!-- END BREADCRUMB -->
+
+<br clear="all" />
+
+
+<!-- START CONTENT -->
+<div id="content">
+
+
+<h1>OpenX Class</h1>
+
+<p>This OpenX Class allow you to connect to an OpenX server API and perform different operations : get statistics, add new advertiser, link banner with zone, etc...</p>
+<p>Technically, you should be able to perform any API call available with the <kbd>version 2</kbd>(v2) of the <a href="http://developer.openx.org/api/" target="_blank">OpenX API</a>.</p>
+<p><kbd>Download</kbd> this library: <a href="http://www.ecliptik.net/openx/openx.zip">openx.zip</a></p>
+
+<p class="important"><strong>Note:</strong>&nbsp; This documentation is incomplete, not all the methods of the OpenX API were tested. It is only compatible with the <kbd>version 2</kbd> of the OpenX API. The API v1 is deprecated since OpenX 2.7. This library was tested with OpenX 2.8.1. It <kbd>require CodeIgniter XML-RPC</kbd> library from CI 1.7.2 and up.</p>
+
+
+<h2>Configuration file</h2>
+
+<p>The first thing you will need to do to in order to use this Class is to configure the <kbd>openx.php</kbd> file in the <kbd>configuration</kbd> directory. You will need to provide the host address, port, username, password as well as the API <kbd>relative path</kbd>. For this last item, normally shouldn't need to change the default value.</p>
+
+<code>
+	$config['host']	= "http://openx.my_server.com";<br />
+	$config['port']	= 80;<br />
+	$config['api']	= "/www/api/v2/xmlrpc/";<br />
+	$config['username']	= "my_username";<br />
+	$config['password']	= "my_password";<br />
+</code>
+
+
+<h2>Initializing the Class</h2>
+
+<p>Like most other classes in CodeIgniter, the OpenX class is initialized in your controller
+using the <dfn>$this->load-&gt;library</dfn> function:</p>
+
+<code>$this->load->library('Openx');</code>
+
+<p>Once the library is loaded it will be ready for use.  The Openx library object you will use to call all functions is: <dfn>$this->openx</dfn></p>
+
+
+<h2>Using the OpenX Class</h2>
+
+<p>There is just too many methods available with this API so I will not go trough all of them. Instead I will give you some basic examples how to use this library and I'm sure you will be able to figure out the rest by yourself. Don't forget, always refer to the <a href="http://developer.openx.org/api/" target="_blank">OpenX API</a> for the complete list of methods.</p>
+
+
+<h3>Create a new advertiser(agency)</h3>
+
+<code>
+	$advertiser = array(<br />
+		"advertiserName"=>"advertiser_name",<br />
+		"contactName"=>"FirstName LastName",<br />
+		"emailAddress"=>"agency@example.com"<br />
+	);<br />
+	<br />
+	$advertiserId = $this->openx->addAdvertiser(<var>$advertiser</var>);<br />
+</code>
+
+<h3>Create a new campaign</h3>
+
+<code>
+	$campaign = array(<br />
+		"advertiserId"=><var>$advertiserId</var>,<br />
+		"campaignName"=>"my_campaign"<br />
+	);<br />
+	<br />
+	$campaignId = $this->openx->addCampaign(<var>$campaign</var>);<br />
+</code>
+
+<h3>Get publisher info</h3>
+
+<code>
+	$publisher = $this->openx->getPublisher(<var>$publisherId</var>);<br />
+</code>
+
+<h3>Get campaign info</h3>
+
+<code>
+	$campaign = $this->openx->getCampaign(<var>$campaignId</var>);<br />
+</code>
+
+<h3>Add a new zone</h3>
+
+<code>
+	$zone = array(<br />
+		'publisherId'=> <var>$publisher_id</var>,<br />
+		'zoneName'	=> <var>$zone_name</var>,<br />
+		'type'		=> <var>$type</var>, //i.e. banner<br />
+		'width'		=> <var>$width</var>,<br />
+		'height'	=> <var>$height</var><br />
+	);<br />
+	<br />
+	$zoneId = $this->openx->addZone(<var>$zone</var>);<br />
+</code>
+
+<h3>Link banner to a zone</h3>
+
+<code>
+	$this->openx->linkBanner(<var>$zone_id</var>, <var>$banner_id</var>);<br />
+</code>
+
+<h3>Get zone daily statistics</h3>
+
+<code>
+	$dt1 = new DateTime();<br />
+	$dt2 = new DateTime();//today<br />
+	$dt1->modify("-7 days");// to retrieve stats for the last 7 days<br />
+	<br />
+	$zoneDailyStats = $this->openx->zoneDailyStatistics(<var>$zone_id</var>, <var>$dt1</var>, <var>$dt2</var>);<br />
+</code>
+
+
+</div>
+<!-- END CONTENT -->
+
+
+<div id="footer">
+<p>
+Previous Topic:&nbsp;&nbsp;<a href="#">Previous Class</a>
+&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+<a href="#top">Top of Page</a>&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+<a href="#">User Guide Home</a>&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+Next Topic:&nbsp;&nbsp;<a href="#">Next Class</a>
+</p>
+<p><a href="http://codeigniter.com">CodeIgniter</a> &nbsp;&middot;&nbsp; Copyright &#169; 2006-2009 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">Ellislab, Inc.</a></p>
+</div>
+
+</body>
+</html>

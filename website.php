@@ -1,70 +1,7 @@
 <?php 
 require_once 'header.php';
 ?>
-
-<script type="text/javascript">
-$(function(){
-	$("#list").jqGrid({
-		url:'websiteGet.php',
-		datatype: 'json',
-		mtype: 'GET',
-		colNames:['Website', 'Reichweite'],
-		colModel :[
-					{name:'name', index:'name', width:200, resizable:true,editable:true,editoptions:{size:100} },
-					{name:'range', index:'range', width:200,resizable:true,editable:true,editoptions:{size:100} }
-					],
-					pager: '#pager',
-					rowNum:50,
-					rowList:[10,20,30],
-					sortname: 'name',
-					sortorder: 'desc',
-					viewrecords: true,
-					autowidth: true,
-					rownumbers: true,
-					gridview: true,
-					width: 700,
-					height: 400,
-					caption: 'Webseiten',
-					editurl:"websiteDo.php",
-				//	toolbar:[true,"top"],
-					ondblClickRow: function(rowid) {
-						jQuery(this).jqGrid('editGridRow', rowid, { width: 'auto' },
-						{
-							recreateForm:true,closeAfterEdit:true,
-							closeOnEscape:true,reloadAfterSubmit:false});
-					}
-					//   	jsonReader : {
-					//           root: "rows",
-					//           page: "page",
-					//           total: "total",
-					//           records: "records",
-					//           repeatitems: true,
-					//           cell: "cell",
-					//           id: "id",
-					//           userdata: "userdata"
-					//   	}
-	});
-	var grid = $("#list");   
-	$("#list").jqGrid('navGrid','#pager',{edit:true,add:true,del:true},
-			{ beforeShowForm: function(form) {
-                // "editmodlist"
-                var dlgDiv = $("#editmod" + grid[0].id);
-                var parentDiv = dlgDiv.parent(); // div#gbox_list
-                var dlgWidth = dlgDiv.width();
-                var parentWidth = parentDiv.width();
-                var dlgHeight = dlgDiv.height();
-                var parentHeight = parentDiv.height();
-                // TODO: change parentWidth and parentHeight in case of the grid
-                //       is larger as the browser window
-                  dlgDiv[0].style.width = 600 + "px";
-                dlgDiv[0].style.height =  + "auto";
-                dlgDiv[0].style.top = Math.round((parentHeight-dlgHeight)/2) + "px";
-                dlgDiv[0].style.left = Math.round((parentWidth-dlgWidth)/2) + "px";
-              
-            }}
-			);
-});
-
+<script type="text/javascript" src="website.js">
 </script>
 
 <?php 
@@ -74,7 +11,7 @@ include_once 'inc/oaNavigation.php';
 //include_once 'inc/firstLevelContent.php';
 ?>
 
-
+<!--
 <div id="firstLevelContent">
     <div id="secondLevelNavigation">
                <ul class="navigation first">
@@ -202,7 +139,7 @@ $('#deleteSelection').click(function(event) {
 	}
 });
 
-//-->
+
 </script>
 
 </li>
@@ -236,12 +173,6 @@ Show
 <div class="corner left"></div>
 <div class="corner right"></div>
 </div>
-<!-- jqGrid Table Inhalt -->
-<div style="margin:10px;">
-<table id="list"><tr><td/></tr></table>
-<div id="pager"></div>
-</div>
-<!-- /jqGrid Table Inhalt -->
 
 </div>
 
@@ -250,7 +181,7 @@ Show
 
 </div>
 </div>
-
+-->
 <?php 
 include 'footer.php';
 ?>

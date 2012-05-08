@@ -1,16 +1,21 @@
 <div id="oaNavigation">
     <ul id="oaNavigationTabs">
-      <li class="<?php echo ($page=='campaign')?'active':'passive';?> first">
+    	<li class="<?php echo ($page=='home')?'active':'passive';?> first">
+         <div class="left"><div class="right">
+          <a href="index.php" accesskey="Startseite">Dashboard</a>
+        </div></div>
+      </li>
+      <li class="<?php echo ($page=='campaign')?'active':'passive';?><?php echo ($page=='home')?' after-active':'';?>">
         <div class="left"><div class="right">
           <a href="campaign.php" accesskey="Startseite">Kampagnen</a>
         </div></div>
       </li>
-      <li class="<?php echo ($page=='customer')?'active':'passive';?><?php echo ($page=='campaign')?' after-active':'';?>">
+      <li class="<?php echo ($page=='status')?'active':'passive';?><?php echo ($page=='campaign')?' after-active':'';?>">
         <div class="left"><div class="right">
-          <a href="customer.php" accesskey="Startseite">Kunden</a>
+          <a href="status.php" accesskey="Startseite">Kampagnenstatus</a>
         </div></div>
       </li>
-      <li class="<?php echo ($page=='report')?'active':'passive';?><?php echo ($page=='customer')?' after-active':'';?>">
+      <li class="<?php echo ($page=='report')?'active':'passive';?><?php echo ($page=='status')?' after-active':'';?>">
         <div class="left"><div class="right">
           <a href="stats.php" accesskey="Startseite">Reportings</a>
         </div></div>
@@ -20,12 +25,13 @@
           <a href="website.php" accesskey="Startseite">Webseiten</a>
         </div></div>
       </li>
-       <li class="<?php echo ($page=='status')?'active':'passive';?><?php echo ($page=='website')?' after-active':'';?> last">
+       <li class="<?php echo ($page=='customer')?'active':'passive';?><?php echo ($page=='website')?' after-active':'';?> last">
         <div class="left"><div class="right">
-          <a href="status.php" accesskey="Startseite">Status</a>
+          <a href="customer.php" accesskey="Startseite">Kunden</a>
         </div></div>
       </li>
     </ul>
+    <!--
     <ul id="oaNavigationExtra">
         <li class="accountSwitcher">
             <div class="triggerContainer"><div class="switchTrigger">General Manager</div> <a href="#" accesskey="w"><u>W</u>orking as</a> </div>
@@ -63,9 +69,10 @@
         initAccoutSwitcher("http://ads20.wwe-media.de/www/admin/account-switch-search.php");
     
       });
-      -->
+
       
     </script>        
     <div class="accountSwitcherOverlay">&nbsp;</div>
-    
-</div><!-- oaNavigation  -->
+    -->
+</div>
+</--><!-- oaNavigation  -->

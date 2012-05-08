@@ -36,7 +36,7 @@ body{margin:0;padding:0;background:#fff;color:#444}
 body.hasInterface{min-width:1000px;-width:expression((document.documentElement.offsetWidth < 1020)? "1000px": "auto" )}
 a{color:#0767A8;text-decoration:none}
 a:hover{text-decoration:underline}
-#oaHeader{position:relative;background-color:#fff;height:68px}
+#oaHeader{position:relative;background-color:#fff;height:100px}
 #oaHeaderBranding{position:absolute;left:0;z-index:3}
 .brandingDefault {width:170px;height:62px;background:url(../images/logo-wtag.png) no-repeat; margin:3px 0px 0px 3px; text-indent: -1000px; -background:none;-filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='assets/images/logo-wtag.png')}
 .brandingName{height:48px;padding:0 0 0 22px;line-height:48px;font-size:20px;font-weight:bold;color:#888;word-spacing: -0.2em}
@@ -47,10 +47,10 @@ a:hover{text-decoration:underline}
 #oaSearch input.search{position:relative;left:32px;top:7px;border:0;margin:0;width:130px;height:13px;background:none}
 #oaSearch input.submit{position:absolute;right:9px;top:9px;width:12px;height:12px;padding:0;margin:0;border:0;cursor:pointer;background:url(../images/searchfull.png) -194px -9px no-repeat}
 #oaSearch input.submit:hover, #oaSearch input.submit:focus{background-position: -206px -9px}
-#oaNavigation{position:relative;top: -24px;z-index:2;height:24px;border-bottom:1px solid #d1d1d1}
+#oaNavigation{position:relative;top: -0px;z-index:2;height:47px;border-bottom:1px solid #d1d1d1}
 #oaNavigation ul, #oaHeader ul{margin:0;padding:0;list-style-type:none}
-#oaNavigationTabs{position:absolute;top:1px;left:7px;line-height:26px;height:29px;min-width:300px;list-style-type:none;white-space:nowrap}
-#oaNavigationTabs *{height:29px}
+#oaNavigationTabs{position:absolute;top:1px;left:7px;line-height:26px;height:49px;min-width:300px;list-style-type:none;white-space:nowrap}
+#oaNavigationTabs *{height:49px}
 #oaNavigationTabs li{float:left;margin:0;background:url(../images/tab-body.gif) left 0px repeat-x}
 #oaNavigationTabs li div.left{background:url(../images/tab-link.gif) left 0px no-repeat}
 #oaNavigationTabs li.first div.left{background:url(../images/tab-lead-in.gif) left 0px no-repeat}

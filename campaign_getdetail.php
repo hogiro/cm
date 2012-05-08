@@ -1,16 +1,21 @@
 <?php
+header('content-type: text/html; charset=UTF-8');
 
 
 require_once 'source/class.db.php';
 require_once 'source/class.writefile.php';
 
+if ($_REQUEST['id']){
+	$id = $_REQUEST['id'];
+}
+
+
 $wf = new writefile();
-	 $wf->write('TEST');
 $db = new db();
 
-	 $sql = "SELECT name FROM campaign WHERE id=1";
+	 $sql = "SELECT campaign_id,name, startDate, endDate, customer, websites, volumes, rebook, avk, avw, user FROM campaign WHERE campaign_id=$id";
 	 
-	 $wf->write($sql);
+	// $wf->write($sql);
 	 $result = $db->query($sql);
 
 	if(mysql_num_rows($result)>0){

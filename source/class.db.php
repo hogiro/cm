@@ -8,17 +8,17 @@
 class db {
 	
 	private $localHost = 'cm';
-	private $localHostWeb = 'hogiro.homeip.net';
+	private $localHostWeb = 'dpc';
 	
 	private $dbHost_local     = 'localhost';
     private $dbUser_local    = 'root';
     private $dbPass_local    = '';
     private $database_local  = 'cmdb';
 
-    private $dbHost_server     = 'db2570.1und1.de';
-    private $dbUser_server    = 'dbo333148847';
-    private $dbPass_server     = 'concredo123';
-    private $database_server   = 'db333148847';
+    private $dbHost_server     = 'localhost';
+    private $dbUser_server    = 'dbfederati.90';
+    private $dbPass_server     = 'cdobqU7cO2';
+    private $database_server   = 'dbfederati90';
 
 
     public $link;

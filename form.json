@@ -1,7 +1,0 @@
-{
-    success: true,
-    users: [
-        { firstName: 'Devrim', lastName: 'Welat', birthDate: '01/01/1980' },
-        { firstName: 'Arne', lastName: 'Mueller', birthDate: '01.01.1980' }
-    ]
-}
