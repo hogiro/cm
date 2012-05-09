@@ -87,6 +87,39 @@ var store = Ext.create('Ext.data.Store',{
 		value:filterCampaigns.value
 	}]
 });
+
+
+/*
+ *   User Combobox Model
+ *   ------------------------------------------------------------------------------------------
+ */
+Ext.define ('Users', {
+	extend: 'Ext.data.Model',
+	fields: [
+			 {name: 'user_id'},
+	         {name: 'username'}
+	         ]
+});
+
+
+/*
+ *  User Combobox Store
+ *  ------------------------------------------------------------------------------------------
+ */
+var storeUsers = Ext.create('Ext.data.Store',{
+	model: 'Users',
+	autoLoad: true,
+	proxy: {
+		type: 'ajax',
+		url : 'user_data.php',
+		reader: {
+			type: 'json',
+			root: 'rows',
+			totalProperty: 'totalCount'
+		},
+		simpleSortMode:true
+	}
+});
 	
 
 /*
@@ -289,14 +322,21 @@ var bbar = new Ext.PagingToolbar({
 									},
 									{
 										xtype		: 'textarea',
-										fieldLabel	: 'Ansprechpartner',
+										fieldLabel	: 'Kunde',
 										name		: 'customer',
 										width		: 800,
 										minHeight	: 100,
 										grow		: false
 					
-									},
-									{
+									},{
+										xtype: 'combobox',
+										fieldLabel: 'Ansprechpartner',
+										name: 'user',
+										displayField:'username',
+										valueField:'user_id',
+										width:400,
+										store:storeUsers
+									},{
 										xtype		: 'textarea',
 										fieldLabel	: 'Umfeld Webseiten',
 										name		: 'websites',
@@ -335,12 +375,6 @@ var bbar = new Ext.PagingToolbar({
 										width		: 800,
 										minHeight	: 100,
 										grow		: false
-									},
-									{
-										xtype: 'combobox',
-										fieldLabel: 'Ansprechpartner Intern',
-										name: 'user',
-										width:400
 									}],
 									buttons: [{
 										text: 'Speichern',
@@ -413,12 +447,20 @@ var bbar = new Ext.PagingToolbar({
 									},
 									{
 										xtype: 'textarea',
-										fieldLabel: 'Ansprechpartner',
+										fieldLabel: 'Kunde',
 										name: 'customer',
 										width:750,
 										height:100
-									},
-									{
+									},{
+										xtype: 'combobox',
+										fieldLabel: 'Ansprechpartner',
+										name: 'user',
+										displayField:'username',
+										valueField:'user_id',
+										width:400,
+										store:storeUsers,
+										value:'user'
+									},{
 										xtype: 'textarea',
 										fieldLabel: 'Umfeld Webseiten',
 										name: 'websites',
@@ -453,12 +495,6 @@ var bbar = new Ext.PagingToolbar({
 										name: 'avw',
 										width:750,
 										minHeight:80
-									},
-									{
-										xtype: 'combobox',
-										fieldLabel: 'Ansprechpartner Intern',
-										name: 'user',
-										width:400
 									}],
 								
 								buttons: [{
