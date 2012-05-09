@@ -1,131 +1,151 @@
+/*
+ *  Campaign Operations
+ */
 Ext.onReady(function(){
 Ext.require([
     'Ext.grid.*',
     'Ext.data.*'
 ]);
 
+/*
+ *  Declaration of Windows for new campaigns and campaign details
+ */
 var win;
 var winNew, winDetail;
 
 
+ var filterCampaigns = new Ext.form.ComboBox({
+		name: 'filterCampaigns',
+		width: 300,
+		store: new Ext.data.ArrayStore({
+			    fields: 	    	
+			    	 ['state', 'val'],
+				    data  : [
+				      ["Alle Kampagnen", ""],
+				      ["Aktive Kampagnen", "aktiv"],
+				      ["Beendete Kampagnen", "beendet"],
+				      ["Erwartete Kampagnen", "erwartet"]
+				    ]
+			    
+			  
+				}),
+		  mode : 'local',
+		//  value: '',
+		  listWidth     : 200,
+		  triggerAction : 'all',
+		  displayField  : 'state',
+		  valueField    : 'val',
+		  editable      : false,
+		  forceSelection: true,
+		  emptyText: 'Auswahl'
+});
 
-Ext.define ('Campaigns', {
-		extend: 'Ext.data.Model',
-		fields: [
-				 {name: 'campaign_id'},
-		         {name: 'state'},
-		         {name: 'name'},
-		         {name: 'startDate'},
-		         {name: 'endDate'}
-		         ]
-	});
-	
-Ext.define('User', {
-	    extend: 'Ext.data.Model',
-	    fields: [ 'state', 'name', 'startDate', 'endDate' ]
-	});
-	
 
-		/*
-	var store = Ext.create('Ext.data.ArrayStore', {
-		model: 'Book',
-	
-		data:[
-		      
-		      ['Ext JS 4: First Look', 'Ext JS', false, null, 0],
-		      ['Learning Ext JS 3.2','Ext JS','3.2',true, '2010/10/01', 40.49],
-		      ['Ext JS 3.0 Cookbook','Ext JS','3', true, '2009/10/01', 44.99],
-		      ['Learning Ext JS','Ext JS','2.x', true, '2008/11/01', 35.99]
-		     ]
-		     */
-	var store = Ext.create('Ext.data.Store',{
-		model: 'Campaigns',
-		autoLoad: true,
-		remoteSort:true,
-		proxy: {
-			type: 'ajax',
-			url : 'campaign_data.php',
-			//headers: {'Content-Type': 'application/json; charset=UTF-8'},
-			reader: {
-				type: 'json',
-				root: 'rows',
-				totalProperty: 'totalCount'
-			},
-			simpleSortMode:true
-		},
-		sorters: [{
-			property:'name',
-			direction:'ASC'
-		}]
-	});
-	
-	/*
-	var rowEditor = Ext.create('Ext.grid.plugin.RowEditing', {
-	clicksToEdit: 1
-	});
-	*/
+
 
 /*
- *  Kampagnen Grid
+ *   Campaign Model
+ *   ------------------------------------------------------------------------------------------
  */
-	
-var combo = new Ext.form.ComboBox({
-  name : 'perpage',
-  width: 40,
-  store: new Ext.data.ArrayStore({
-    fields: ['id'],
-    data  : [
-      ['15'],
-      ['25'],
-      ['50']
-    ]
-  }),
-  mode : 'local',
-  value: '15',
-
-  listWidth     : 40,
-  triggerAction : 'all',
-  displayField  : 'id',
-  valueField    : 'id',
-  editable      : false,
-  forceSelection: true
+Ext.define ('Campaigns', {
+	extend: 'Ext.data.Model',
+	fields: [
+			 {name: 'campaign_id'},
+	         {name: 'state'},
+	         {name: 'name'},
+	         {name: 'startDate'},
+	         {name: 'endDate'}
+	         ]
 });
-
-var bbar = new Ext.PagingToolbar({
-  store:       store, //the store you use in your grid
-  displayInfo: true,
-  pageSize:100,
-  items   :    [
-    '-',
-    'Per Page: ',
-    combo
-  ]
-});
-
-combo.on('select', function(combo, record) {
-  bbar.pageSize = parseInt(record.get('id'), 10);
-  bbar.doLoad(bbar.cursor);
-}, this);
 
 /*
-var bbar = Ext.create('Ext.PagingToolbar', {
-	          store: store,
-	          displayInfo: true,
-	          pageSize: 100,
-	          displayMsg: 'Displaying topics {0} - {1} of {2}',
-	          emptyMsg: 'No topics to display'
+ *  Campaign Main Store
+ *  ------------------------------------------------------------------------------------------
+ */
+var store = Ext.create('Ext.data.Store',{
+	model: 'Campaigns',
+	autoLoad: true,
+	remoteSort:true,
+	remoteFilter:true,
+	pageSize:50,
+	proxy: {
+		type: 'ajax',
+		url : 'campaign_data.php',
+		reader: {
+			type: 'json',
+			root: 'rows',
+			totalProperty: 'totalCount'
+		},
+		simpleSortMode:true
+	},
+	sorters: [{
+		property:'name',
+		direction:'ASC'
+	}],
+	filters:[{
+		property: 'state',
+		value:filterCampaigns.value
+	}]
 });
+	
 
-*/
-combo.on('select', function(combo, record) {
-  bbar.pageSize = parseInt(record.get('id'), 10);
-  bbar.doLoad(bbar.cursor);
-}, this);
+/*
+ *  ComboBox for Paginagion Limit on Campaign Grid
+ *  ------------------------------------------------------------------------------------------
+ */	
+var comboPageSize = new Ext.form.ComboBox({
+	  name : 'perpage',
+	  width: 80,
+	  store: new Ext.data.ArrayStore({
+	    fields: ['id'],
+	    data  : [
+	      ['25'],
+	      ['50'],
+	      ['75'],
+	      ['100']
+	    ]
+	  }),
+	  mode : 'local',
+	  value: '50',
 
-var grid = Ext.create('Ext.grid.Panel', {
+	  listWidth     : 40,
+	  triggerAction : 'all',
+	  displayField  : 'id',
+	  valueField    : 'id',
+	  editable      : false,
+	  forceSelection: true
+	});
+
+/*
+ *  Bottom Bar for Campaign Grid
+ *  ------------------------------------------------------------------------------------------
+ */
+var bbar = new Ext.PagingToolbar({
+	  store:       store, //the store you use in your grid
+	  displayInfo: true,
+	  pageSize:100,
+	  items   :    [
+	    '-',
+	    'Per Page: ',
+	    comboPageSize
+	  ]
+	});
+
+	comboPageSize.on('select', function(combo, value) {
+	 store.pageSize = combo.value;
+	  store.load();
+	  bbar.doLoad(bbar.cursor);
+	}, this);
+
+
+/*
+ *  Campaign Grid
+ *  ------------------------------------------------------------------------------------------
+ */
+	var grid = Ext.create('Ext.grid.Panel', {
 		store: store,
 		width: 'auto',
-		height:650,
+		height:700,
 		tbar: toolbar,
 		title: 'Kampagnen',
 		renderTo: 'pager',	
@@ -153,31 +173,7 @@ var grid = Ext.create('Ext.grid.Panel', {
 		        	  width: 100,
 		        	  dataIndex: 'endDate',
 		        	  renderer: Ext.util.Format.dateRenderer('d.m.Y')
-		          }
-		          
-		          /*, {
-		        	  xtype:'actioncolumn', //8
-		        	  width:50,
-		        	  items: [{
-		        		  icon: 'images/edit.png',
-		        		  tooltip: 'Edit',
-		        		  handler: function(grid, rowIndex, colIndex) {
-		        			  var rec = grid.getStore().getAt(rowIndex);
-		        			  Ext.MessageBox.alert('Edit',rec.get('name'));
-		        		  }
-		        }, {
-		        	  icon: 'images/delete.gif',
-		        	  tooltip: 'Delete',
-		        	  handler: function(grid, rowIndex, colIndex) {
-		        		  var rec = grid.getStore().getAt(rowIndex);
-		        		  Ext.MessageBox.alert('Delete',rec.get('name'));
-		        	  }
-		        	  		       
-		        }]
-		     }
-		     
-		      */
-		      ],
+		          }],
 		   tbar: [{
             text:'Neue Kampagne',
             tooltip:'Add a new row',
@@ -202,14 +198,7 @@ var grid = Ext.create('Ext.grid.Panel', {
         		winNew.show();
             }
 
-        }, '-', /*{
-            text:'Bearbeiten',
-            tooltip:'Bearbeiten',
-            iconCls:'option',
-            handler: function() {
-            	Ext.Msg.alert('Alert', 'Add new X item!');
-            	}
-        },'-',*/{
+        }, '-', {
             text:'L&ouml;schen',
             tooltip:'Remove the selected item',
             iconCls:'remove',
@@ -220,23 +209,12 @@ var grid = Ext.create('Ext.grid.Panel', {
             // Place a reference in the GridPanel
             ref: '../removeButton',
             disabled: true
-        }, '-', {
-        		xtype: 'combo',
-        		label: 'Anzeige:',
-        		width: 300,
-        		store: [
-        			'Alle Kampagnen',
-        			'Active Kampagnen',
-        			'Beendete Kampagnen',
-        			'Erwartete Kampagnen'
-        		]
-        }],
+        }, '-' , 'Filter: ',filterCampaigns],
          bbar: bbar,
 	    viewConfig: {
 	        forceFit:true,
 	        listeners: {
 	        	 itemdblclick: function(dataview, index, item, e){
-	        	 	//var store = grid.getStore();	
         			var sm = grid.getSelectionModel().getSelection();
 					if (! winDetail) {
             			winDetail = Ext.create('Ext.Window', {
@@ -244,10 +222,6 @@ var grid = Ext.create('Ext.grid.Panel', {
                 		closeAction   : 'close',
                 		id            : 'win',
                 		closable	  : false,
-                		/*
-                		width         : 800,
-						height        : 800,
-						*/
                 		height:Ext.getBody().getViewSize().height*0.95,
     					width:Ext.getBody().getViewSize().width*0.95, //80%
 						modal		  : true,
@@ -270,10 +244,19 @@ var grid = Ext.create('Ext.grid.Panel', {
 	      }
 	});
 	
+	filterCampaigns.on('select', function(combo, value) {
+		store.clearFilter();
+		var stateFilter = new Ext.util.Filter({
+   		property: "state", value: combo.value
+		});
+		store.filter(stateFilter);
+	  	store.load();
+	}, this);
 
-	/*
-	 *  FORM for adding new Campaigns
-	 */
+/*
+*  FORM for adding new Campaigns
+*  ------------------------------------------------------------------------------------------
+*/
 	var myForm=	Ext.create('Ext.form.Panel', {
 							url:'campaign_add.php',
 							//renderTo: 'addNewRow',
@@ -390,26 +373,11 @@ var grid = Ext.create('Ext.grid.Panel', {
 
 		});  
 
-		/*
-    var newWindow = function(formName) {
-        if (! win) {
-            win = Ext.create('Ext.Window', {
-                title    : "Neue Kampagne Hinzuf&uuml;gen",
-                closeAction   : 'destroy',
-                id            : 'win',
-                width         : 800,
-				height        : 800,
-                constrain     : true,
-                items:[
-                formName
-                ]
-            });
-        }
-        win.show();
-    }
-    
-*/
 
+/*
+ *  Form Detail of the Campaigns
+ *  ------------------------------------------------------------------------------------------
+ */
 	var detailForm =Ext.create('Ext.form.Panel',  {
 						url:'campaign_update.php',
 						id: 'detailForm',
@@ -525,108 +493,3 @@ var grid = Ext.create('Ext.grid.Panel', {
 
 	
 });
-
-
-
-function elasticTextArea (elementId){
-
-    /*
-     * This are two helper functions, they are delcared here for convinience
-     * so we can get and set all styles at once and because they are not available in ext-core
-     * only in ExtJs
-     */
-     
-    //available in extjs (not ext-core) as element.getStyles
-    function getStyles(el, arguments){
-        var ret = {};
-        total = arguments.length ;
-        for (var n=0; n<total; n++ )
-           ret[ arguments[n] ] = el.getStyle(arguments[n]); 
-        return ret;
-    }
-    
-    //available in extjs (not ext-core) as Ext.Domhelper.applyStyles
-    function applyStyles  (el, styles){
-        if(styles){
-            var i = 0,
-                len,
-                style; 
-                
-            el = Ext.fly(el);                   
-            if(Ext.isFunction(styles)) {
-                styles = styles.call();
-            }
-            if (typeof styles == "string") {
-                styles = styles.split(/:|;/g);
-                for (len = styles.length; i < len;) {
-                    el.setStyle(styles[i++], styles[i++]);  
-                }
-            } else if (Ext.isObject(styles)) {
-                el.setStyle(styles);
-            }           
-        }   
-    }
-    
-    //minimum and maximum text area size
-    var minHeight = 10 ;
-    var maxHeight = 300 ;
-
-    //increment value when resizing the text area
-    var growBy = 20 ;
-    
-    var el = Ext.get(elementId);
-  //get text area width
-    var width = el.getWidth();
-
-    //current text area styles
-    var styles = getStyles(el, ['padding-top', 'padding-bottom', 'padding-left', 'padding-right', 'line-height', 'font-size', 'font-family', 'font-weight', 'font-style']);
-
-    //store text area width into styles object to later apply them to the div 
-    styles.width = width +'px' ;
-        //hide the text area scrool to avoid flickering
-        el.setStyle('overflow', 'hidden');
-      //create the hidden div only if does not exists
-        if(! this.div){
-
-            //create the hidden div outside the viewport area
-            this.div = Ext.DomHelper.append(Ext.getBody() || document.body, {
-                'id':elementId + '-preview-div'
-                ,'tag' : 'div'
-                ,'style' : 'position: absolute; top: -100000px; left: -100000px;'
-            }, true);
-
-            //apply the text area styles to the hidden div
-            applyStyles(this.div, styles);
-
-
-            //recalculate the div height on each key stroke
-            el.on('keyup', function() {
-                elasticTextArea(elementId);
-            }, this);
-        }
-
-      //clean up text area contents, so that no special chars are processed
-      //replace \n with <br>&nbsp; so that the enter key can trigger a height increase
-      //but first remove all previous entries, so that the height measurement can be as accurate as possible
-          this.div.update( 
-                  el.dom.value.replace(/<br \/>&nbsp;/, '<br />')
-                              .replace(/<|>/g, ' ')
-                              .replace(/&/g,"&amp;")
-                              .replace(/\n/g, '<br />&nbsp;') 
-                  );
-
-          //finally get the div height
-          var textHeight = this.div.getHeight();
-      //enforce text area maximum and minimum size
-          if ( (textHeight > maxHeight ) && (maxHeight > 0) ){
-              textHeight = maxHeight ;
-              el.setStyle('overflow', 'auto');
-          }
-          if ( (textHeight < minHeight ) && (minHeight > 0) ) {
-              textHeight = minHeight ;
-          }
-
-          //resize the text area
-          el.setHeight(textHeight + growBy , true);
-      }
-

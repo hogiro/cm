@@ -7,14 +7,25 @@ $db = new db();
 $start = ($_REQUEST["start"] == null)? 0 : $_REQUEST["start"];
 $limit = ($_REQUEST["limit"] == null)? 200 : $_REQUEST["limit"];	
 
+$filter =json_decode($_REQUEST['filter']);
+
+
 // Gather all pending requests
-$query = "SELECT campaign_id, case when CURDATE() < startDate then 'erwartet' when CURDATE()>endDate then 'beendet' else 'aktiv' end AS state,name,startDate, endDate FROM campaign" ;
+$query = "SELECT campaign_id, case  when CURDATE() < startDate then 'erwartet' when CURDATE()>endDate then 'beendet' else 'aktiv' end AS state,name,startDate, endDate FROM campaign" ;
+
+if ($filter[0]->value !=''){
+$query .=" WHERE case  when CURDATE() < startDate then 'erwartet' when CURDATE()>endDate then 'beendet' else 'aktiv' end='".$filter[0]->value."'";
+}
 
 $query .= " ORDER BY ".$_REQUEST["sort"]." ".$_REQUEST["dir"];
 if ($_REQUEST['sort'] !='name'){
 	$query .=", name ASC";
 }
+
+
+
 $query .= " LIMIT ".$start.",".$limit;
+
 
 $result = $db->query($query); 
 
@@ -40,6 +51,7 @@ if (mysql_num_rows($result) > 0){
 
 }
 
+
 else { // If no requests found, we return nothing
 
 	$myData = array('"rows"' => '','"totalCount' => '0');
@@ -48,6 +60,8 @@ else { // If no requests found, we return nothing
 	exit();
 
 }
+
+
 
 ?>
 
